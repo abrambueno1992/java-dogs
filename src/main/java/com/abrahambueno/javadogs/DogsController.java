@@ -2,11 +2,11 @@ package com.abrahambueno.javadogs;
 
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,5 +64,18 @@ public class DogsController {
                         d11.getContent().getName().compareToIgnoreCase(d12.getContent().getName())).collect(Collectors.toList());
         return new Resources<>(dogs, linkTo(methodOn(DogsController.class).allBreeds()).withSelfRel());
     }
+    // post /dogs -> adds the dog
+    @PostMapping("")
+    public ResponseEntity<?> postDog(@RequestBody Dogs newDog) throws URISyntaxException {
+        Dogs newEntry = dogrepos.save(new Dogs (newDog.getName(), newDog.getWeight(), newDog.isApartment()));
+        Resource<Dogs> resource = assembler.toResource(newEntry);
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
+    }
+
+
+    // put /dogs/{id} -> adds or update if already present, with id
+    // delete /dogs/{id} -> deletes the dogs with that id
 
 }

@@ -95,6 +95,13 @@ public class DogsController {
                 .created(new URI(resource.getId().expand().getHref()))
                 .body(resource);
     }
+
     // delete /dogs/{id} -> deletes the dogs with that id
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteDog(@PathVariable Long id) {
+        dogrepos.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

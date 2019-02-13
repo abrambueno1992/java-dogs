@@ -12,6 +12,7 @@ public class SeedDatabase {
     public CommandLineRunner InitDB(DogRepository dogRepository) {
         return args -> {
             log.info("Seeding " + dogRepository.save(new Dogs("Springer", 50, false)));
+            log.info("Seeding " + dogRepository.save(new Dogs("Springer", 53, true)));
             log.info("Seeding " + dogRepository.save(new Dogs("Bulldog", 50, true)));
             log.info("Seeding " + dogRepository.save(new Dogs("Collie", 50, false)));
             log.info("Seeding " + dogRepository.save(new Dogs("Boston Terrie", 35, true)));

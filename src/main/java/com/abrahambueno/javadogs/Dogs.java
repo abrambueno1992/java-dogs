@@ -33,4 +33,8 @@ public class Dogs {
     public double getWeight() {
         return weight;
     }
+
+    public boolean isApartment() {
+        return apartment;
+    }
 }

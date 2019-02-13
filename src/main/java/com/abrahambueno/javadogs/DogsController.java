@@ -1,8 +1,11 @@
 package com.abrahambueno.javadogs;
 
 //import jdk.jfr.internal.Repository;
+
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,16 +68,22 @@ public class DogsController {
                         d11.getContent().getName().compareToIgnoreCase(d12.getContent().getName())).collect(Collectors.toList());
         return new Resources<>(dogs, linkTo(methodOn(DogsController.class).allBreeds()).withSelfRel());
     }
-    // post /dogs -> adds the dog
-    @PostMapping("")
-    public ResponseEntity<?> createDog(@RequestBody Dogs newDog) throws URISyntaxException {
-        Dogs newEntry = dogrepos.save(new Dogs (newDog.getName(), newDog.getWeight(), newDog.isApartment()));
-        Resource<Dogs> resource = assembler.toResource(newEntry);
-        return ResponseEntity
-                .created(new URI(resource.getId().expand().getHref()))
-                .body(resource);
-    }
 
+    @PostMapping("")
+//    @RequestMapping(value = "/dogs", method = RequestMethod.POST)
+    public ResponseEntity<?> createDog(@RequestBody Dogs newDog) throws URISyntaxException {
+//        logger.info("Creating the dog" + newDog);
+        dogrepos.save(newDog);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI("/dogs")); //.buildAndExpand(newDog.getId()).toUri());
+        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+//        Dogs newEntry = dogrepos.save(new Dogs (newDog.getName(), newDog.getWeight(), newDog.isApartment()));
+//        Resource<Dogs> resource = assembler.toResource(newEntry);
+//        return ResponseEntity
+//                .created(new URI(resource.getId().expand().getHref()))
+//                .body(resource);
+    }
+    // post /dogs -> adds the dog
 
     // put /dogs/{id} -> adds or update if already present, with id
     @PutMapping("/{id}")

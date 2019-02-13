@@ -1,5 +1,6 @@
 package com.abrahambueno.javadogs;
 
+//import jdk.jfr.internal.Repository;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +67,7 @@ public class DogsController {
     }
     // post /dogs -> adds the dog
     @PostMapping("")
-    public ResponseEntity<?> postDog(@RequestBody Dogs newDog) throws URISyntaxException {
+    public ResponseEntity<?> createDog(@RequestBody Dogs newDog) throws URISyntaxException {
         Dogs newEntry = dogrepos.save(new Dogs (newDog.getName(), newDog.getWeight(), newDog.isApartment()));
         Resource<Dogs> resource = assembler.toResource(newEntry);
         return ResponseEntity
@@ -76,6 +77,24 @@ public class DogsController {
 
 
     // put /dogs/{id} -> adds or update if already present, with id
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateDog(@RequestBody Dogs newDog, @PathVariable Long id) throws URISyntaxException {
+        Dogs updatedDog = dogrepos.findById(id)
+                .map(dog -> {
+                    dog.setName(newDog.getName());
+                    dog.setWeight(newDog.getWeight());
+                    dog.setApartment(newDog.isApartment());
+                    return dogrepos.save(dog);
+                })
+                .orElseGet(() -> {
+                    newDog.setId(id);
+                    return dogrepos.save(newDog);
+                });
+        Resource<Dogs> resource = assembler.toResource(updatedDog);
+        return ResponseEntity
+                .created(new URI(resource.getId().expand().getHref()))
+                .body(resource);
+    }
     // delete /dogs/{id} -> deletes the dogs with that id
 
 }

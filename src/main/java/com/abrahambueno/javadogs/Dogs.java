@@ -37,4 +37,20 @@ public class Dogs {
     public boolean isApartment() {
         return apartment;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public void setApartment(boolean apartment) {
+        this.apartment = apartment;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

@@ -11,7 +11,7 @@ public class DogResourceAssembler implements ResourceAssembler <Dogs, Resource<D
     @Override
     public Resource<Dogs> toResource(Dogs dog) {
         return new Resource<Dogs>(dog,
-//                linkTo(methodOn(DogsController.class).findOne(dog.getId())).withRel(),
-                linkTo(methodOn(DogsController.class).all()).withRel("dogs"));
+                linkTo(methodOn(DogsController.class).allWeight()).withRel("doggy weight"),
+                linkTo(methodOn(DogsController.class).allBreeds()).withRel("doggy"));
     }
 }

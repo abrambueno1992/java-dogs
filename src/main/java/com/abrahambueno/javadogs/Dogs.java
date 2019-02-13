@@ -25,4 +25,12 @@ public class Dogs {
         this.weight = weight;
         this.apartment = apartment;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
 }

@@ -30,15 +30,20 @@ public class DogsController {
 
     // RequestMapping(method = RequestMethod.GET)
     @GetMapping("/breeds")
-    public Resources<Resource<Dogs>> all() {
-        List<Resource<Dogs>> dogs = dogrepos.findAll().stream()
-                .map(assembler::toResource)
-                .collect(Collectors.toList());
-        return new Resources<>(dogs, linkTo(methodOn(DogsController.class).all()).withSelfRel());
+    public Resources<Resource<Dogs>> allBreeds() {
+//        dogrepos = dogrepos.findAll().sort((e1, e2) -> e1.getName().compareToIgnoreCase(e2.getName()));
+        List<Resource<Dogs>> dogs = dogrepos.findAll().stream().map(assembler::toResource).sorted((d11, d12) ->
+                d11.getContent().getName().compareToIgnoreCase(d12.getContent().getName())).collect(Collectors.toList());
+//        Collections.sort(dogs);
+
+        return new Resources<>(dogs, linkTo(methodOn(DogsController.class).allBreeds()).withSelfRel());
     }
 
-//    @GetMapping("/weight")
-
+    @GetMapping("/weight")
+    public Resources<Resource<Dogs>> allWeight() {
+        List<Resource<Dogs>> dogs = dogrepos.findAll().stream().map(assembler::toResource).sorted((e1, e2) -> (int) e1.getContent().getWeight() - (int) e1.getContent().getWeight()).collect(Collectors.toList());
+        return new Resources<>(dogs, linkTo(methodOn(DogsController.class).allWeight()).withSelfRel());
+    }
 //    @GetMapping("/breeds")
 
 //    @GetMapping("/apartment")
